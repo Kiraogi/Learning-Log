@@ -42,7 +42,9 @@ def new_topic(request):
         # Отправлены данные POST; обработать данные.
         form = TopicForm(data=request.POST)
         if form.is_valid():
-            form.save()
+            new_topic = form.save(commit=False)
+            new_topic.owner = request.user
+            new_topic.save()
             return redirect('learning_logs:topics')
 
     # Вывести пустую или недействительную форму.
@@ -76,6 +78,8 @@ def edit_entry(request, entry_id):
     """Редактирует существующую запись."""
     entry = Entry.objects.get(id=entry_id)
     topic = entry.topic
+    if topic.owner != request.user:
+        raise Http404
 
     if request.method != 'POST':
         # Исходный запрос; форма заполняется данными текущей записи.
