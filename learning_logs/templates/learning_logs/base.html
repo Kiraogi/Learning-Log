@@ -28,11 +28,12 @@
             <span class="navbar-text">Hello, {{ user.username }}.</span>
             </li>
             <li class="nav-item">
-<!--                операция выхода в Django должна быть выполнена с помощью POST запроса, чтобы обеспечить безопасность и защиту от CSRF-атак.-->
+<!--            Операция выхода в Django должна быть выполнена с помощью POST запроса,
+                чтобы обеспечить безопасность и защиту от CSRF-атак.-->
 <!--            <a class="nav-link" href="{% url 'users:logout' %}">Log out</a>-->
                 <form action="{% url 'users:logout' %}" method="post">
 <!--                    {% csrf_token %} для защиты от CSRF-атаки и чтобы метод был указан как POST.-->
-                {% csrf_token %} 
+                {% csrf_token %}
                     <button type="submit" class="btn btn-link nav-link">Log out</button>
                 </form>
             </li>
