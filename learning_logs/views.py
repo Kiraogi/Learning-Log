@@ -11,6 +11,12 @@ def index(request):
     return render(request, 'learning_logs/index.html')
 
 
+# Проверка того, что тема принадлежит текущему пользователю.
+def check_topic_owner(topic, request):
+    if topic.owner != request.user:
+        raise Http404
+
+
 @login_required
 def topics(request):
     """Выводит список тем."""
@@ -23,9 +29,11 @@ def topics(request):
 def topic(request, topic_id):
     """Выводи одну тему и все ее записи."""
     topic = Topic.objects.get(id=topic_id)
-    # Проверка того, что тема принадлежит текущему пользователю.
-    if topic.owner != request.user:
-        raise Http404
+    # # Проверка того, что тема принадлежит текущему пользователю.
+    # if topic.owner != request.user:
+    #     raise Http404
+    # Рефакторинг кода
+    check_topic_owner(topic, request)
 
     entries = topic.entry_set.order_by('-date_added')
     context = {'topic': topic, 'entries': entries}
@@ -56,6 +64,10 @@ def new_topic(request):
 def new_entry(request, topic_id):
     """Добавляет новую запись по конкретной теме."""
     topic = Topic.objects.get(id=topic_id)
+
+    # Проверка того, что тема принадлежит текущему пользователю.
+    check_topic_owner(topic, request)
+
     if request.method != 'POST':
         # Данные не отправлялись; создается пустая форма.
         form = EntryForm()
@@ -78,8 +90,10 @@ def edit_entry(request, entry_id):
     """Редактирует существующую запись."""
     entry = Entry.objects.get(id=entry_id)
     topic = entry.topic
-    if topic.owner != request.user:
-        raise Http404
+    # if topic.owner != request.user:
+    #     raise Http404
+    # Рефакторинг кода
+    check_topic_owner(topic, request)
 
     if request.method != 'POST':
         # Исходный запрос; форма заполняется данными текущей записи.
