@@ -12,7 +12,7 @@ Learning-Log — это веб-приложение, предназначенн�
 
 ## Технологический стек
 **Backend:** Django, Python  
-**Frontend:** HTML, CSS, JavaScript  
+**Frontend:** HTML, CSS, JavaScript, Bootstrap4  
 **Database:** SQLite 
 
 ## Быстрый старт
